@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "Report",
+    "displayName": "Utilization and Biling Report"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "046c9039-dfb6-4d7b-bcf1-adc0b4e1455b"
+  }
+}

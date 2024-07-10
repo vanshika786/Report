@@ -1,0 +1,39 @@
+relationship 4602efac-1ba0-4f6a-8a65-a87a3c7f7b6c
+	joinOnDateBehavior: datePartOnly
+	fromColumn: Project.StartDate
+	toColumn: LocalDateTable_09076992-6788-403e-a8af-864416d74e9c.Date
+
+relationship 49345724-5e2d-45a3-8213-64a5e9cc8b98
+	joinOnDateBehavior: datePartOnly
+	fromColumn: Project.EndDate
+	toColumn: LocalDateTable_43cffb33-ba1b-47f9-84c5-8d42b8fb776e.Date
+
+relationship 66f8d208-a6da-48e7-a252-8e48d88750e8
+	joinOnDateBehavior: datePartOnly
+	fromColumn: 'Time Tracking'.Date
+	toColumn: LocalDateTable_e0a1e005-da4a-4f56-a338-88c21f4cf749.Date
+
+relationship AutoDetected_fa74488e-0fe9-4b05-b0ac-22687beefdf8
+	fromColumn: Task.ConsultantID
+	toColumn: Consultant.ConsultantID
+
+relationship AutoDetected_84596722-8458-4d58-860c-42a04b664bb3
+	isActive: false
+	toCardinality: many
+	fromColumn: Task.ProjectID
+	toColumn: Project.ProjectID
+
+relationship 7c5efb22-79ec-4153-03ac-91e9a57b389d
+	fromColumn: 'Time Tracking'.TaskID
+	toColumn: Task.TaskID
+
+relationship 11ee15e7-92b5-0a09-4778-98f7b00dc17a
+	isActive: false
+	fromColumn: 'Time Tracking'.ConsultantID
+	toColumn: Consultant.ConsultantID
+
+relationship 67ce1aca-a8ea-08f4-2649-5d7c67bca8f2
+	crossFilteringBehavior: bothDirections
+	fromColumn: 'Time Tracking'.ProjectID
+	toColumn: Project.ProjectID
+

@@ -1,0 +1,104 @@
+table Project
+	lineageTag: efdbdae5-8ca4-4559-84fd-3f06af5bf72d
+
+	column ProjectID
+		dataType: int64
+		formatString: 0
+		lineageTag: f59ec8ed-c17c-4b4d-a1eb-8a06504ad26b
+		summarizeBy: none
+		sourceColumn: ProjectID
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProjectName
+		dataType: string
+		lineageTag: 9176e6bc-d5d7-4401-b982-1e9cf73cb951
+		summarizeBy: none
+		sourceColumn: ProjectName
+
+		annotation SummarizationSetBy = Automatic
+
+	column StartDate
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: eb20a52f-2803-43f5-95ee-b39ed00ee99b
+		summarizeBy: none
+		sourceColumn: StartDate
+
+		variation Variation
+			isDefault
+			relationship: 4602efac-1ba0-4f6a-8a65-a87a3c7f7b6c
+			defaultHierarchy: LocalDateTable_09076992-6788-403e-a8af-864416d74e9c.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column EndDate
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: b7b24536-5ab3-4918-b3ab-fb41c5665024
+		summarizeBy: none
+		sourceColumn: EndDate
+
+		variation Variation
+			isDefault
+			relationship: 49345724-5e2d-45a3-8213-64a5e9cc8b98
+			defaultHierarchy: LocalDateTable_43cffb33-ba1b-47f9-84c5-8d42b8fb776e.'Date Hierarchy'
+
+		changedProperty = IsHidden
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column AvailableHoursPerProject = ```
+			
+			VAR StartDate = 'Project'[StartDate]
+			VAR EndDate = 'Project'[EndDate]
+			
+			VAR TotalDays = DATEDIFF(StartDate, EndDate, DAY) + 1  // Add 1 to include the start date
+			
+			VAR SundaysAndMondays = 
+			    COUNTROWS(
+			        FILTER(
+			            CALENDAR(StartDate, EndDate),
+			            WEEKDAY([Date]) = 1 || WEEKDAY([Date]) = 2  // 1 = Sunday, 2 = Monday
+			        )
+			    )
+			
+			VAR WorkingDays = TotalDays - SundaysAndMondays
+			
+			RETURN WorkingDays * 8  // Assuming 8 working hours per day
+			
+			```
+		dataType: int64
+		formatString: 0
+		lineageTag: 27d6c4cb-a232-43be-9f68-4a9910c5aad0
+		summarizeBy: sum
+		isDataTypeInferred
+
+		annotation SummarizationSetBy = Automatic
+
+	column AvailableHoursPerMonth = 160
+		dataType: int64
+		formatString: 0
+		lineageTag: 66e25914-8d29-462b-ab38-fb71b1d7969a
+		summarizeBy: sum
+		isDataTypeInferred
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Project = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents("C:\Users\14319\Desktop\RDP Company.xlsx"), null, true),
+				    Project_Sheet = Source{[Item="Project",Kind="Sheet"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(Project_Sheet, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"ProjectID", Int64.Type}, {"ProjectName", type text}, {"StartDate", type date}, {"EndDate", type date}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table
+

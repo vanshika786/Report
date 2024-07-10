@@ -1,0 +1,73 @@
+{
+  "version": "1.1.0",
+  "diagrams": [
+    {
+      "ordinal": 0,
+      "scrollPosition": {
+        "x": 0,
+        "y": 0
+      },
+      "nodes": [
+        {
+          "location": {
+            "x": 0,
+            "y": 0
+          },
+          "nodeIndex": "Consultant",
+          "nodeLineageTag": "70b971ea-1bbf-4f02-98c6-d0353d57e350",
+          "size": {
+            "height": 176,
+            "width": 234
+          },
+          "zIndex": 1
+        },
+        {
+          "location": {
+            "x": 771.78143750645859,
+            "y": 7
+          },
+          "nodeIndex": "Project",
+          "nodeLineageTag": "efdbdae5-8ca4-4559-84fd-3f06af5bf72d",
+          "size": {
+            "height": 176,
+            "width": 234
+          },
+          "zIndex": 3
+        },
+        {
+          "location": {
+            "x": 415.88000472723837,
+            "y": 0
+          },
+          "nodeIndex": "Task",
+          "nodeLineageTag": "341d6e5b-c6fa-4062-9895-e3237f479d91",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 2
+        },
+        {
+          "location": {
+            "x": 211,
+            "y": 300.57695505970207
+          },
+          "nodeIndex": "Time Tracking",
+          "size": {
+            "height": 200,
+            "width": 234
+          },
+          "zIndex": 4
+        }
+      ],
+      "name": "All tables",
+      "zoomValue": 100,
+      "pinKeyFieldsToTop": false,
+      "showExtraHeaderInfo": false,
+      "hideKeyFieldsWhenCollapsed": false,
+      "tablesLocked": false
+    }
+  ],
+  "selectedDiagram": "All tables",
+  "defaultDiagram": "All tables"
+}

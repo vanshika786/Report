@@ -1,0 +1,50 @@
+table Consultant
+	lineageTag: 70b971ea-1bbf-4f02-98c6-d0353d57e350
+
+	column ConsultantID
+		dataType: int64
+		formatString: 0
+		lineageTag: cae59c26-e669-444c-86e5-fb90ed5ab942
+		summarizeBy: none
+		sourceColumn: ConsultantID
+
+		annotation SummarizationSetBy = Automatic
+
+	column ConsultantName
+		dataType: string
+		lineageTag: 06b517af-42d1-449f-bc24-48b81566869d
+		summarizeBy: none
+		sourceColumn: ConsultantName
+
+		annotation SummarizationSetBy = Automatic
+
+	column ConsultantEmail
+		dataType: string
+		lineageTag: 0d4d5ef6-c6e9-41fe-9a5a-be2458e86993
+		summarizeBy: none
+		sourceColumn: ConsultantEmail
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Hourly Rate'
+		dataType: int64
+		formatString: 0
+		lineageTag: 862c8ac0-2e99-458c-a3ca-1d6ece785b9b
+		summarizeBy: none
+		sourceColumn: Hourly Rate
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Consultant = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents("C:\Users\14319\Desktop\RDP Company.xlsx"), null, true),
+				    Consultant_Sheet = Source{[Item="Consultant",Kind="Sheet"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(Consultant_Sheet, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"ConsultantID", Int64.Type}, {"ConsultantName", type text}, {"ConsultantEmail", type text}, {"Hourly Rate", Int64.Type}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table
+

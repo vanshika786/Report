@@ -1,0 +1,60 @@
+table Task
+	lineageTag: 341d6e5b-c6fa-4062-9895-e3237f479d91
+
+	column TaskID
+		dataType: int64
+		formatString: 0
+		lineageTag: e53c683b-1ed5-4ee1-a21b-db62bf96da3d
+		summarizeBy: none
+		sourceColumn: TaskID
+
+		annotation SummarizationSetBy = Automatic
+
+	column TaskName
+		dataType: string
+		lineageTag: aeaea8b3-3b83-45ae-a955-06381d7c0df2
+		summarizeBy: none
+		sourceColumn: TaskName
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProjectID
+		dataType: int64
+		formatString: 0
+		lineageTag: b7c8f0b2-a9ad-4805-b81d-68da674304bf
+		summarizeBy: count
+		sourceColumn: ProjectID
+
+		annotation SummarizationSetBy = Automatic
+
+	column ConsultantID
+		dataType: int64
+		formatString: 0
+		lineageTag: 698eb78a-182f-464f-a279-dc58440c9c58
+		summarizeBy: none
+		sourceColumn: ConsultantID
+
+		annotation SummarizationSetBy = Automatic
+
+	column 'Estimated Hours'
+		dataType: int64
+		formatString: 0
+		lineageTag: 1123a994-f565-4a61-8987-fa70d36cd6d2
+		summarizeBy: sum
+		sourceColumn: Estimated Hours
+
+		annotation SummarizationSetBy = Automatic
+
+	partition Task = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents("C:\Users\14319\Desktop\RDP Company.xlsx"), null, true),
+				    Task_Sheet = Source{[Item="Task",Kind="Sheet"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(Task_Sheet, [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"TaskID", Int64.Type}, {"TaskName", type text}, {"ProjectID", Int64.Type}, {"ConsultantID", Int64.Type}, {"Estimated Hours", Int64.Type}})
+				in
+				    #"Changed Type"
+
+	annotation PBI_ResultType = Table
+

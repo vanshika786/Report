@@ -1,0 +1,27 @@
+model Model
+	culture: en-US
+	defaultPowerBIDataSourceVersion: powerBI_V3
+	sourceQueryCulture: en-CA
+	dataAccessOptions
+		legacyRedirects
+		returnErrorValuesAsNull
+
+annotation PBI_QueryOrder = ["Consultant","Task","Project","Time Tracking"]
+
+annotation __PBI_TimeIntelligenceEnabled = 1
+
+annotation PBIDesktopVersion = 2.130.930.0 (24.06)
+
+annotation PBI_ProTooling = ["DevMode"]
+
+ref table Consultant
+ref table DateTableTemplate_324fde5f-d94b-4622-bc99-fd2b606fe5db
+ref table Task
+ref table Project
+ref table LocalDateTable_09076992-6788-403e-a8af-864416d74e9c
+ref table LocalDateTable_43cffb33-ba1b-47f9-84c5-8d42b8fb776e
+ref table 'Time Tracking'
+ref table LocalDateTable_e0a1e005-da4a-4f56-a338-88c21f4cf749
+
+ref cultureInfo en-US
+

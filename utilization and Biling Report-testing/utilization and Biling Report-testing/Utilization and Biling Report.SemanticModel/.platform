@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "Utilization and Biling Report"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "a119c05f-7d4c-4472-83e7-a8eb6173b052"
+  }
+}

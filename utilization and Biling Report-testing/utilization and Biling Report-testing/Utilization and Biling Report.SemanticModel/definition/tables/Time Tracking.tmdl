@@ -1,0 +1,122 @@
+table 'Time Tracking'
+	lineageTag: ba60259d-6ec7-470b-984b-59472a4801f0
+
+	measure TotalHoursByConsultant = SUM('Time Tracking'[Hours])
+		formatString: 0
+		lineageTag: 481e506b-c7e0-4d3d-942d-55c0dd913b80
+
+	measure ProjectUtilization = ```
+			
+			 DIVIDE(
+			        SUM('Time Tracking'[Hours]),
+			        MAXX(
+			            RELATEDTABLE('Project'),
+			            'Project'[AvailableHoursPerProject]
+			        )
+			    ) * 100
+			```
+		lineageTag: db76f8df-0c2d-41c1-85f0-edcc5ee0dc93
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	measure 'Total Billing' = SUMX('Time Tracking', 'Time Tracking'[Hours] * RELATED(Consultant[Hourly Rate]))
+		formatString: 0
+		lineageTag: 45d714b3-faa6-46bb-a688-acbfdc7bb8b9
+
+	measure TotalHoursByTask = SUM('Time Tracking'[Hours])
+		formatString: 0
+		lineageTag: 302402a1-17d5-49bf-a2c4-85cb58f08826
+
+	measure ConsultantUtilization = ```
+			
+			    DIVIDE(
+			        SUM('Time Tracking'[Hours]),
+			        MAXX(
+			            RELATEDTABLE('Project'),
+			            'Project'[AvailableHoursPerMonth]
+			        )
+			    ) * 100
+			
+			```
+		lineageTag: 8a278b51-ce82-40ee-9cb2-a3bcfcded326
+
+		annotation PBI_FormatHint = {"isGeneralNumber":true}
+
+	column TimeTrackingID
+		dataType: int64
+		formatString: 0
+		lineageTag: 1f9e87ae-db25-4063-8839-2eaef52a32f5
+		summarizeBy: count
+		sourceColumn: TimeTrackingID
+
+		annotation SummarizationSetBy = Automatic
+
+	column TaskID
+		dataType: int64
+		formatString: 0
+		lineageTag: a1fd79e1-5fc1-49d8-bc21-6a9b8bdc9ef9
+		summarizeBy: none
+		sourceColumn: TaskID
+
+		annotation SummarizationSetBy = Automatic
+
+	column ConsultantID
+		dataType: int64
+		formatString: 0
+		lineageTag: da5b1090-dd39-4f58-8d11-cdc859633515
+		summarizeBy: count
+		sourceColumn: ConsultantID
+
+		annotation SummarizationSetBy = Automatic
+
+	column Date
+		dataType: dateTime
+		formatString: Long Date
+		lineageTag: 6aeabea5-3924-43d2-b9a6-18be842b12cf
+		summarizeBy: none
+		sourceColumn: Date
+
+		variation Variation
+			isDefault
+			relationship: 66f8d208-a6da-48e7-a252-8e48d88750e8
+			defaultHierarchy: LocalDateTable_e0a1e005-da4a-4f56-a338-88c21f4cf749.'Date Hierarchy'
+
+		annotation SummarizationSetBy = Automatic
+
+		annotation UnderlyingDateTimeDataType = Date
+
+	column Hours
+		dataType: int64
+		formatString: 0
+		lineageTag: 7811cb9e-4f6f-4771-8bf5-50508dcc82d3
+		summarizeBy: sum
+		sourceColumn: Hours
+
+		annotation SummarizationSetBy = Automatic
+
+	column ProjectID = RELATED(Task[ProjectID])
+		dataType: int64
+		formatString: 0
+		lineageTag: 6e0d3d23-9970-4784-b52a-f3101b366759
+		summarizeBy: none
+		isDataTypeInferred
+
+		annotation SummarizationSetBy = Automatic
+
+	partition 'Time Tracking' = m
+		mode: import
+		source =
+				let
+				    Source = Excel.Workbook(File.Contents("C:\Users\14319\Desktop\RDP Company.xlsx"), null, true),
+				    #"Time TrackingTimeTracking_Sheet" = Source{[Item="Time TrackingTimeTracking",Kind="Sheet"]}[Data],
+				    #"Promoted Headers" = Table.PromoteHeaders(#"Time TrackingTimeTracking_Sheet", [PromoteAllScalars=true]),
+				    #"Changed Type" = Table.TransformColumnTypes(#"Promoted Headers",{{"TimeTrackingID", Int64.Type}, {"TaskID", Int64.Type}, {"ConsultantID", Int64.Type}, {"Date", type date}, {"Hours", Int64.Type}})
+				in
+				    #"Changed Type"
+
+	changedProperty = Name
+
+	annotation PBI_NavigationStepName = Navigation
+
+	annotation PBI_ResultType = Table
+
